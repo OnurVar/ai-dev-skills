@@ -1,0 +1,10 @@
+{
+  "name": "ios",
+  "version": "0.1.0",
+  "description": "Native iOS (Swift / SwiftUI / UIKit / Obj-C) — planning, always-on rules via CLAUDE.md @import, and high-signal review pipeline.",
+  "author": {
+    "name": "Onur Var",
+    "email": "onur.var@primer.io"
+  },
+  "keywords": ["ios", "swift", "swiftui", "uikit", "review", "planning"]
+}

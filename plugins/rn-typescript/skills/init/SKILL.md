@@ -1,0 +1,41 @@
+---
+description: Bootstrap React Native TypeScript rules into the current project. Copies this plugin's rules file into the project's .claude/ directory and appends an @import line to CLAUDE.md so rules auto-load in every Claude session. Run once per project.
+---
+
+# /rn-typescript:init
+
+One-time setup that wires this plugin's RN TypeScript rules into the current project's CLAUDE.md. After running this, every Claude session in the project auto-loads the RN TypeScript rules.
+
+## Steps
+
+1. **Verify the working directory.** Current directory must be a project root (contains `.git/`). If not, tell the user to run from their project root and stop.
+
+2. **Ensure `.claude/` exists** in the project root. Create it if missing.
+
+3. **Copy the rules file.**
+   - Source: `${CLAUDE_PLUGIN_ROOT}/rules/rn-typescript.md`
+   - Destination: `.claude/rn-typescript-rules.md`
+   - If the destination already exists, ask the user before overwriting. Offer a diff preview if helpful.
+
+4. **Update the project CLAUDE.md.**
+   - If `CLAUDE.md` is missing at the project root, create it starting with `# Project rules`.
+   - Check whether `@.claude/rn-typescript-rules.md` is already imported. If yes, tell the user and stop.
+   - If not, append:
+     ```
+     ## React Native TypeScript rules
+     @.claude/rn-typescript-rules.md
+     ```
+
+5. **Report to the user.** Tell them:
+   - Setup is done.
+   - Every future Claude session in this repo auto-loads RN TypeScript rules.
+   - Next: `/rn-typescript:plan <feature>` to start planning, `/rn-typescript:review` to review pending changes.
+   - They can edit `.claude/rn-typescript-rules.md` for project-local overrides.
+   - Re-running `/rn-typescript:init` refreshes the rules file from upstream (will prompt before overwriting).
+   - If the project also has native iOS/Android code, suggest running `/rn-ios-native:init` and `/rn-android-native:init` as well.
+
+## Notes
+
+- `.claude/rn-typescript-rules.md` is a project-local snapshot. Commit it with the project so teammates get the same rules.
+- If the project already has a different RN rules file imported, do not remove it — add ours alongside and let the user reconcile.
+- Never overwrite a file or modify CLAUDE.md without the user's explicit confirmation when any destructive change is required.

@@ -1,0 +1,37 @@
+{
+  "name": "ai-dev-skills",
+  "owner": {
+    "name": "Onur Var",
+    "email": "onur.var@primer.io"
+  },
+  "metadata": {
+    "description": "Claude Code plugins for iOS, Android, and React Native. Per-stack init / plan / review pipelines with high-signal review filtering."
+  },
+  "plugins": [
+    {
+      "name": "ios",
+      "source": "./plugins/ios",
+      "description": "Native iOS (Swift / SwiftUI / UIKit / Obj-C) — /ios:init, /ios:plan, /ios:review."
+    },
+    {
+      "name": "android",
+      "source": "./plugins/android",
+      "description": "Native Android (Kotlin / Jetpack Compose / View system) — /android:init, /android:plan, /android:review."
+    },
+    {
+      "name": "rn-typescript",
+      "source": "./plugins/rn-typescript",
+      "description": "React Native TypeScript/JavaScript layer — /rn-typescript:init, /rn-typescript:plan, /rn-typescript:review."
+    },
+    {
+      "name": "rn-ios-native",
+      "source": "./plugins/rn-ios-native",
+      "description": "React Native iOS bridge (Swift / Obj-C / Obj-C++) — /rn-ios-native:init, /rn-ios-native:plan, /rn-ios-native:review."
+    },
+    {
+      "name": "rn-android-native",
+      "source": "./plugins/rn-android-native",
+      "description": "React Native Android bridge (Kotlin / Java) — /rn-android-native:init, /rn-android-native:plan, /rn-android-native:review."
+    }
+  ]
+}
