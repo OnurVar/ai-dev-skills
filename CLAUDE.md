@@ -104,13 +104,27 @@ Produces a written plan before any code is written. Five required sections:
 
 Source reference repos are shallow-cloned into `references/` (git-ignored). For each new stack we delegate a digest agent that reads only the mapped repos and writes the draft `rules/<stack>.md`. Stack-by-stack, not all at once — easier to review each one.
 
-| Stack | Source repos (in `references/`) |
+### Source repos
+
+| Repo | Local folder | Covers |
+|---|---|---|
+| [steipete/agent-rules](https://github.com/steipete/agent-rules) | `references/agent-rules/` | Swift / iOS conventions, Swift 6 migration |
+| [twostraws/SwiftAgents](https://github.com/twostraws/SwiftAgents) | `references/SwiftAgents/` | Modern Swift / SwiftUI idioms (Paul Hudson) |
+| [AvdLee/SwiftUI-Agent-Skill](https://github.com/AvdLee/SwiftUI-Agent-Skill) | `references/SwiftUI-Agent-Skill/` | SwiftUI state, performance, accessibility |
+| [android/nowinandroid](https://github.com/android/nowinandroid) | `references/nowinandroid/` | Google's real Android sample app + `AGENTS.md` |
+| [Kotlin/kotlin-agent-skills](https://github.com/Kotlin/kotlin-agent-skills) | `references/kotlin-agent-skills/` | JetBrains Kotlin idioms, AGP / R8 |
+| [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `references/agent-skills-vercel/` | React / TS best practices, render hazards |
+| [callstackincubator/agent-skills](https://github.com/callstackincubator/agent-skills) | `references/agent-skills-callstack/` | React Native specifics, bridge patterns, brownfield |
+
+### Stack → source repo mapping
+
+| Stack | Source repos |
 |---|---|
-| `ios` | `agent-rules` (steipete), `SwiftAgents` (twostraws), `SwiftUI-Agent-Skill` (AvdLee) |
-| `android` | `nowinandroid` (Google), `kotlin-agent-skills` (JetBrains) |
-| `rn-typescript` | `agent-skills-vercel` (Vercel Labs), `agent-skills-callstack` (Callstack) |
-| `rn-ios-native` | `agent-rules`, `SwiftAgents`, `SwiftUI-Agent-Skill`, `agent-skills-callstack` |
-| `rn-android-native` | `nowinandroid`, `kotlin-agent-skills`, `agent-skills-callstack` |
+| `ios` | [steipete/agent-rules](https://github.com/steipete/agent-rules), [twostraws/SwiftAgents](https://github.com/twostraws/SwiftAgents), [AvdLee/SwiftUI-Agent-Skill](https://github.com/AvdLee/SwiftUI-Agent-Skill) |
+| `android` | [android/nowinandroid](https://github.com/android/nowinandroid), [Kotlin/kotlin-agent-skills](https://github.com/Kotlin/kotlin-agent-skills) |
+| `rn-typescript` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills), [callstackincubator/agent-skills](https://github.com/callstackincubator/agent-skills) |
+| `rn-ios-native` | [steipete/agent-rules](https://github.com/steipete/agent-rules), [twostraws/SwiftAgents](https://github.com/twostraws/SwiftAgents), [AvdLee/SwiftUI-Agent-Skill](https://github.com/AvdLee/SwiftUI-Agent-Skill), [callstackincubator/agent-skills](https://github.com/callstackincubator/agent-skills) |
+| `rn-android-native` | [android/nowinandroid](https://github.com/android/nowinandroid), [Kotlin/kotlin-agent-skills](https://github.com/Kotlin/kotlin-agent-skills), [callstackincubator/agent-skills](https://github.com/callstackincubator/agent-skills) |
 
 Duplicates across stacks are expected — the native-iOS rules feed both the pure iOS plugin and the RN iOS bridge plugin, for example.
 
