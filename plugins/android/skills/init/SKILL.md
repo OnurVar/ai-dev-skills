@@ -13,7 +13,7 @@ One-time setup that wires this plugin's Android rules into the current project's
 2. **Ensure `.claude/` exists** in the project root. Create it if missing.
 
 3. **Copy the rules file.**
-   - Source: `${CLAUDE_PLUGIN_ROOT}/rules/android.md`
+   - Source: `${CLAUDE_PLUGIN_ROOT}/rules/android.md` (plugin install) or `~/.claude/ai-dev-skills/rules/android.md` (manual install via `install.sh`). Use whichever exists.
    - Destination: `.claude/android-rules.md`
    - If the destination already exists, ask the user before overwriting. Offer a diff preview if helpful.
 

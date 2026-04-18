@@ -13,7 +13,7 @@ One-time setup that wires this plugin's RN iOS bridge rules into the current pro
 2. **Ensure `.claude/` exists** in the project root. Create it if missing.
 
 3. **Copy the rules file.**
-   - Source: `${CLAUDE_PLUGIN_ROOT}/rules/rn-ios-native.md`
+   - Source: `${CLAUDE_PLUGIN_ROOT}/rules/rn-ios-native.md` (plugin install) or `~/.claude/ai-dev-skills/rules/rn-ios-native.md` (manual install via `install.sh`). Use whichever exists.
    - Destination: `.claude/rn-ios-native-rules.md`
    - If the destination already exists, ask the user before overwriting.
 

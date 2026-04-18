@@ -13,7 +13,7 @@ One-time setup that wires this plugin's iOS rules into the current project's CLA
 2. **Ensure `.claude/` exists** in the project root. Create it if missing.
 
 3. **Copy the rules file.**
-   - Source: `${CLAUDE_PLUGIN_ROOT}/rules/ios.md`
+   - Source: `${CLAUDE_PLUGIN_ROOT}/rules/ios.md` (plugin install) or `~/.claude/ai-dev-skills/rules/ios.md` (manual install via `install.sh`). Use whichever exists.
    - Destination: `.claude/ios-rules.md`
    - If the destination already exists, ask the user before overwriting. Offer a diff preview if helpful.
 

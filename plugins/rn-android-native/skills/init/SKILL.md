@@ -13,7 +13,7 @@ One-time setup that wires this plugin's RN Android bridge rules into the current
 2. **Ensure `.claude/` exists** in the project root. Create it if missing.
 
 3. **Copy the rules file.**
-   - Source: `${CLAUDE_PLUGIN_ROOT}/rules/rn-android-native.md`
+   - Source: `${CLAUDE_PLUGIN_ROOT}/rules/rn-android-native.md` (plugin install) or `~/.claude/ai-dev-skills/rules/rn-android-native.md` (manual install via `install.sh`). Use whichever exists.
    - Destination: `.claude/rn-android-native-rules.md`
    - If the destination already exists, ask the user before overwriting.
 

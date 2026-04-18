@@ -16,6 +16,31 @@ Five plugins, one per tech stack:
 | `rn-ios-native` | React Native iOS bridge (Swift / Obj-C) | Rules file drafted; skills scaffolded |
 | `rn-android-native` | React Native Android bridge (Kotlin / Java) | Rules file drafted; skills scaffolded |
 
+## Installation
+
+Two ways, depending on your environment:
+
+**Option A — Claude Code plugin marketplace (`/plugin`, when permitted):**
+
+```
+/plugin marketplace add /path/to/ai-dev-skills
+/plugin install ios@ai-dev-skills
+# repeat for android, rn-typescript, rn-ios-native, rn-android-native
+```
+
+Skills are invoked as `/ios:init`, `/ios:plan`, `/ios:review`, etc. (plugin-namespaced with a colon).
+
+**Option B — filesystem install via `./install.sh`** (when `/plugin` is forbidden or unavailable):
+
+```
+./install.sh              # symlink (default) — edits to this repo propagate
+./install.sh --copy       # snapshot copy — self-contained
+./install.sh --uninstall  # remove everything the script installed
+./install.sh --help       # full usage
+```
+
+Skills are invoked as `/ios-init`, `/ios-plan`, `/ios-review`, etc. — colon becomes dash since user-level skills aren't plugin-namespaced. Rules files land at `~/.claude/ai-dev-skills/rules/<stack>.md`, and each stack's `init` skill resolves both the plugin path and this manual path so either install mode works.
+
 ## Per-plugin structure (all plugins identical)
 
 ```
@@ -150,6 +175,7 @@ ai-dev-skills/
 ├── CLAUDE.md                          ← this file (contributor reference)
 ├── README.md                          ← end-user intro
 ├── .gitignore                         ← includes references/
+├── install.sh                         ← filesystem installer (when /plugin is unavailable)
 ├── .claude-plugin/
 │   └── marketplace.json               ← the catalog
 ├── plugins/
