@@ -5,33 +5,38 @@
     "email": "onur.var@primer.io"
   },
   "metadata": {
-    "description": "Claude Code plugins for iOS, Android, and React Native. Per-stack init / plan / review pipelines with high-signal review filtering."
+    "description": "Claude Code plugins for iOS, Android, and React Native. Per-stack init / plan / review pipelines with high-signal review filtering. Every command is ov- prefixed."
   },
   "plugins": [
     {
-      "name": "ios",
-      "source": "./plugins/ios",
-      "description": "Native iOS (Swift / SwiftUI / UIKit / Obj-C) — /ios:init, /ios:plan, /ios:review."
+      "name": "ov-ios",
+      "source": "./plugins/ov-ios",
+      "description": "Native iOS (Swift / SwiftUI / UIKit / Obj-C) — init, plan, review-deep."
     },
     {
-      "name": "android",
-      "source": "./plugins/android",
-      "description": "Native Android (Kotlin / Jetpack Compose / View system) — /android:init, /android:plan, /android:review."
+      "name": "ov-android",
+      "source": "./plugins/ov-android",
+      "description": "Native Android (Kotlin / Jetpack Compose / View system) — init, plan, review-deep."
     },
     {
-      "name": "rn-typescript",
-      "source": "./plugins/rn-typescript",
-      "description": "React Native TypeScript/JavaScript layer — /rn-typescript:init, /rn-typescript:plan, /rn-typescript:review."
+      "name": "ov-rn-typescript",
+      "source": "./plugins/ov-rn-typescript",
+      "description": "React Native TypeScript/JavaScript layer — init, plan, review-deep."
     },
     {
-      "name": "rn-ios-native",
-      "source": "./plugins/rn-ios-native",
-      "description": "React Native iOS bridge (Swift / Obj-C / Obj-C++) — /rn-ios-native:init, /rn-ios-native:plan, /rn-ios-native:review."
+      "name": "ov-rn-ios-native",
+      "source": "./plugins/ov-rn-ios-native",
+      "description": "React Native iOS bridge (Swift / Obj-C / Obj-C++) — init, plan, review-deep."
     },
     {
-      "name": "rn-android-native",
-      "source": "./plugins/rn-android-native",
-      "description": "React Native Android bridge (Kotlin / Java) — /rn-android-native:init, /rn-android-native:plan, /rn-android-native:review."
+      "name": "ov-rn-android-native",
+      "source": "./plugins/ov-rn-android-native",
+      "description": "React Native Android bridge (Kotlin / Java) — init, plan, review-deep."
+    },
+    {
+      "name": "ov-pr",
+      "source": "./plugins/ov-pr",
+      "description": "Lightweight, platform-neutral GitHub PR review — review-quick. One pass, at most three findings, posted as per-line questions."
     }
   ]
 }

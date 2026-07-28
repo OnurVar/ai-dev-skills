@@ -1,0 +1,10 @@
+{
+  "name": "ov-android",
+  "version": "0.1.0",
+  "description": "Native Android (Kotlin / Jetpack Compose / View system) — planning, always-on rules via CLAUDE.md @import, and high-signal review pipeline.",
+  "author": {
+    "name": "Onur Var",
+    "email": "onur.var@primer.io"
+  },
+  "keywords": ["android", "kotlin", "compose", "jetpack-compose", "review", "planning"]
+}

@@ -6,15 +6,18 @@ This file is the **reference point for contributors** working on this repo. It c
 
 ## What this repo is
 
-Five plugins, one per tech stack:
+Six plugins — five per-stack, one platform-neutral:
 
-| Plugin | Covers | Status |
-|---|---|---|
-| `ios` | Native iOS (Swift / SwiftUI / UIKit / Obj-C) | Rules file drafted; skills scaffolded |
-| `android` | Native Android (Kotlin / Java / Jetpack Compose) | Rules file drafted; skills scaffolded |
-| `rn-typescript` | React Native TypeScript / JS layer | Rules file drafted; skills scaffolded |
-| `rn-ios-native` | React Native iOS bridge (Swift / Obj-C) | Rules file drafted; skills scaffolded |
-| `rn-android-native` | React Native Android bridge (Kotlin / Java) | Rules file drafted; skills scaffolded |
+| Plugin | Covers | Skills | Status |
+|---|---|---|---|
+| `ov-ios` | Native iOS (Swift / SwiftUI / UIKit / Obj-C) | init, plan, review-deep | Rules file drafted; skills scaffolded |
+| `ov-android` | Native Android (Kotlin / Java / Jetpack Compose) | init, plan, review-deep | Rules file drafted; skills scaffolded |
+| `ov-rn-typescript` | React Native TypeScript / JS layer | init, plan, review-deep | Rules file drafted; skills scaffolded |
+| `ov-rn-ios-native` | React Native iOS bridge (Swift / Obj-C) | init, plan, review-deep | Rules file drafted; skills scaffolded |
+| `ov-rn-android-native` | React Native Android bridge (Kotlin / Java) | init, plan, review-deep | Rules file drafted; skills scaffolded |
+| `ov-pr` | Any stack — lightweight GitHub PR review | review-quick | Drafted |
+
+**Naming convention:** every plugin is `ov-` prefixed so that typing `/ov` in Claude Code lists exactly these commands and nothing else. The two review commands are named for their depth, not gated behind a flag: `review-deep` is the multi-tool pipeline over your own pending changes, `review-quick` is one pass over someone's open PR.
 
 ## Installation
 
@@ -24,11 +27,11 @@ Two ways, depending on your environment:
 
 ```
 /plugin marketplace add /path/to/ai-dev-skills
-/plugin install ios@ai-dev-skills
-# repeat for android, rn-typescript, rn-ios-native, rn-android-native
+/plugin install ov-ios@ai-dev-skills
+# repeat for ov-android, ov-rn-typescript, ov-rn-ios-native, ov-rn-android-native, ov-pr
 ```
 
-Skills are invoked as `/ios:init`, `/ios:plan`, `/ios:review`, etc. (plugin-namespaced with a colon).
+Skills are invoked as `/ov-ios:init`, `/ov-ios:plan`, `/ov-ios:review-deep`, `/ov-pr:review-quick`, etc. (plugin-namespaced with a colon).
 
 **Option B — filesystem install via `./install.sh`** (when `/plugin` is forbidden or unavailable):
 
@@ -39,30 +42,45 @@ Skills are invoked as `/ios:init`, `/ios:plan`, `/ios:review`, etc. (plugin-name
 ./install.sh --help       # full usage
 ```
 
-Skills are invoked as `/ios-init`, `/ios-plan`, `/ios-review`, etc. — colon becomes dash since user-level skills aren't plugin-namespaced. Rules files land at `~/.claude/ai-dev-skills/rules/<stack>.md`, and each stack's `init` skill resolves both the plugin path and this manual path so either install mode works.
+Skills are invoked as `/ov-ios-init`, `/ov-ios-plan`, `/ov-ios-review-deep`, `/ov-pr-review-quick`, etc. — colon becomes dash since user-level skills aren't plugin-namespaced. Rules files land at `~/.claude/ai-dev-skills/rules/<stack>.md` (filenames stay unprefixed; the prefix exists for command discovery, and rules files are never invoked). Each stack's `init` skill resolves both the plugin path and this manual path so either install mode works.
 
-## Per-plugin structure (all plugins identical)
+Re-running `./install.sh` after a rename prunes the entries an earlier install created that the current one no longer produces, so stale symlinks don't accumulate in `~/.claude/skills/`.
+
+## Per-plugin structure
+
+Per-stack plugins are identical to each other:
 
 ```
-plugins/<stack>/
+plugins/ov-<stack>/
 ├── .claude-plugin/plugin.json
-├── rules/<stack>.md              ← always-on rules, imported into user's CLAUDE.md
+├── rules/<stack>.md                  ← always-on rules, imported into user's CLAUDE.md
 └── skills/
-    ├── init/SKILL.md             ← /<stack>:init   — bootstraps @import into project CLAUDE.md
-    ├── plan/SKILL.md             ← /<stack>:plan   — planning ritual
-    └── review/SKILL.md           ← /<stack>:review — review pipeline
+    ├── init/SKILL.md                 ← /ov-<stack>-init        — bootstraps @import into project CLAUDE.md
+    ├── plan/SKILL.md                 ← /ov-<stack>-plan        — planning ritual
+    └── review-deep/SKILL.md          ← /ov-<stack>-review-deep — review pipeline
+```
+
+The platform-neutral plugin has no rules file — it carries no standing stack knowledge:
+
+```
+plugins/ov-pr/
+├── .claude-plugin/plugin.json
+└── skills/review-quick/SKILL.md      ← /ov-pr-review-quick     — one-pass PR review
 ```
 
 **Why this shape:**
 
 - **`rules/<stack>.md`** — always-on knowledge. When imported into a project's CLAUDE.md, every Claude session in that project loads it automatically. It is also load-bearing for review: `/pr-review-toolkit:review-pr`, `/security-review`, `/simplify`, `/code-review:code-review` all read CLAUDE.md to know what rules to apply.
-- **`skills/init/`** — the bootstrap ritual. A plugin cannot modify the user's project CLAUDE.md directly, so `/<stack>:init` copies the rules file into `.claude/<stack>-rules.md` and appends an `@import` line to the project's CLAUDE.md.
+- **`skills/init/`** — the bootstrap ritual. A plugin cannot modify the user's project CLAUDE.md directly, so `/ov-<stack>-init` copies the rules file into `.claude/<stack>-rules.md` and appends an `@import` line to the project's CLAUDE.md.
 - **`skills/plan/`** — the before-implementation ritual.
-- **`skills/review/`** — the after-implementation ritual; orchestrates the full pipeline.
+- **`skills/review-deep/`** — the after-implementation ritual; orchestrates the full pipeline.
+- **`skills/review-quick/`** — the read-someone-else's-PR ritual; deliberately not a pipeline.
+
+Skill frontmatter carries `description` only, no `name` — the directory name is what becomes the command, in both install modes.
 
 ## Design principles (non-negotiable)
 
-1. **One command per phase, no flags.** `/<stack>:plan`, `/<stack>:review`. No `--fast` / `--deep` variants. Pick one behavior per command and make it right. If flags start creeping back, something is wrong with the default.
+1. **One command per phase, no flags.** `/ov-<stack>-plan`, `/ov-<stack>-review-deep`. No `--fast` / `--deep` variants. Pick one behavior per command and make it right. If flags start creeping back, something is wrong with the default. `/ov-pr-review-quick` is not an exception to this — it takes a different input (someone else's open PR, not your pending changes) and answers a different question, so it's a separate command with one fixed behavior rather than a depth flag on `review-deep`.
 
 2. **Chain upstream plugins, don't copy.** We invoke `/pr-review-toolkit:review-pr`, built-in `/security-review`, built-in `/simplify`, and `/code-review:code-review`. We do not re-implement them. Our value is the stack-specific pre-check, the CLAUDE.md rules we inject via `init`, and the noise filter we apply.
 
@@ -77,11 +95,13 @@ plugins/<stack>/
    - Low-impact nits a senior engineer would not raise
    - Anything below 80% confidence
 
-   Every `rules/<stack>.md` has a `## Review behavior` section that encodes this filter so downstream reviewers apply it. Every `/<stack>:review` orchestrator applies the filter again in its aggregation step (belt-and-suspenders).
+   Every `rules/<stack>.md` has a `## Review behavior` section that encodes this filter so downstream reviewers apply it. Every `/ov-<stack>-review-deep` orchestrator applies the filter again in its aggregation step (belt-and-suspenders). `/ov-pr-review-quick` applies a stricter version of the same filter — see its section below.
 
 5. **Skills read, rules govern.** Because downstream reviewers read CLAUDE.md for rules, the CLAUDE.md `@import` chain is the load-bearing mechanism. Skills only orchestrate the pipeline.
 
-## Review pipeline (every `/<stack>:review`)
+6. **Every command is `ov-` prefixed.** The prefix is the whole reason these skills are findable in a `/` menu shared with built-ins and third-party plugins. A new plugin without it is a bug, not a style choice.
+
+## Review pipeline (every `/ov-<stack>-review-deep`)
 
 Run these steps in order, then aggregate and filter:
 
@@ -96,7 +116,24 @@ Run these steps in order, then aggregate and filter:
 
 If any companion plugin is not installed, the review skill notes it and skips that step gracefully — the pipeline degrades but does not error.
 
-## Planning ritual (every `/<stack>:plan`)
+## Lightweight review (`/ov-pr-review-quick`)
+
+The opposite end from the pipeline above: one reader, one pass over a GitHub PR, at most three findings, posted as short per-line questions. It is platform-neutral and works unchanged for Swift, Kotlin, and TypeScript.
+
+The calibration *is* the skill. Guard it:
+
+- **Depth is the middle setting.** Every file gets read once and understood; no file gets interrogated. Not a skim (catches nothing), not a multi-pass audit (that's `review-deep`).
+- **Findings need an obvious trigger** — something an attentive reader notices reading the file once, visible on the line rather than derived from a model of the system. Anything that takes a deliberate hunt (reasoning through a threading model to find a race, checking business rules against a spec) is out of scope by design, because nothing in the diff points at it.
+- **Cheap confirmation before posting.** Read the function it calls; prove a language claim with a three-line snippet. Chasing one lead into one other file is in budget; investigating a subsystem is not. If it doesn't hold up, drop it — a confident wrong finding costs more than a missed one.
+- **Hard cap of three.** A number, not a vibe. Zero is a valid result. Never pad.
+- **Nitpicks are excluded, not ranked last.** Mentioning them spends the credibility the real findings need. Minor-but-real observations get one labeled line at the bottom, or nothing.
+- **One reader holds the whole diff.** No subagents, no fan-out. Split the diff across agents and each one sees a defensible line while nobody sees the chain.
+- **Comments are questions, not verdicts.** The author may know a constraint the reviewer doesn't.
+- **Posting is not one-shot.** Draft in chat, post on approval, edit afterwards — wording iterations are cheap.
+
+Do not add sub-skill invocations, agent fan-out, confidence scoring, or a categorized output document to this skill; those already exist in `review-deep`, and duplicating them defeats the purpose. Do not add per-platform "what to look for" lists either — that's how a lightweight skill grows back into a heavy one.
+
+## Planning ritual (every `/ov-<stack>-plan`)
 
 Produces a written plan before any code is written. Five required sections:
 
@@ -116,14 +153,15 @@ Produces a written plan before any code is written. Five required sections:
 
 ## Adding a new stack
 
-1. `mkdir plugins/<new-stack>` and create `.claude-plugin/plugin.json` (copy from `plugins/ios/.claude-plugin/plugin.json` and adjust name / description / keywords).
-2. Digest source repos into `rules/<new-stack>.md`. Follow the iOS rules file structure (Review behavior, Architecture, language rules, Concurrency / lifecycle, Memory, Security, Testing, Accessibility, References).
+1. `mkdir plugins/ov-<new-stack>` and create `.claude-plugin/plugin.json` with `"name": "ov-<new-stack>"` (copy from `plugins/ov-ios/.claude-plugin/plugin.json` and adjust name / description / keywords).
+2. Digest source repos into `rules/<new-stack>.md` (filename unprefixed). Follow the iOS rules file structure (Review behavior, Architecture, language rules, Concurrency / lifecycle, Memory, Security, Testing, Accessibility, References).
    - The `## Review behavior` section is **verbatim** across stacks except for the scope sentence (which names the stack's languages / frameworks).
 3. Write `skills/init/SKILL.md` — copies `rules/<stack>.md` into the project's `.claude/` directory and appends `@import` to CLAUDE.md.
 4. Write `skills/plan/SKILL.md` — the 5-section planning ritual with stack-specific checklists.
-5. Write `skills/review/SKILL.md` — the 6-step review pipeline.
+5. Write `skills/review-deep/SKILL.md` — the 6-step review pipeline.
 6. Add a plugin entry in `.claude-plugin/marketplace.json`.
-7. Update the "What this repo is" table above.
+7. Add the stack slug to `STACKS` in `install.sh`.
+8. Update the "What this repo is" table above.
 
 ## How rules files are built
 
@@ -157,7 +195,7 @@ Digest philosophy: extract only correctness, security, and stack-specific concer
 
 ## Companion plugins (not bundled, invoked by our review skills)
 
-Our `/<stack>:review` chain expects these to be available on the user's machine:
+Our `/ov-<stack>-review-deep` chain expects these to be available on the user's machine. `/ov-pr-review-quick` needs none of them — only `gh`:
 
 | Plugin | Source | Used in |
 |---|---|---|
@@ -179,14 +217,17 @@ ai-dev-skills/
 ├── .claude-plugin/
 │   └── marketplace.json               ← the catalog
 ├── plugins/
-│   ├── ios/
+│   ├── ov-ios/
 │   │   ├── .claude-plugin/plugin.json
 │   │   ├── rules/ios.md
-│   │   └── skills/{init,plan,review}/SKILL.md
-│   ├── android/
-│   ├── rn-typescript/
-│   ├── rn-ios-native/
-│   └── rn-android-native/
+│   │   └── skills/{init,plan,review-deep}/SKILL.md
+│   ├── ov-android/
+│   ├── ov-rn-typescript/
+│   ├── ov-rn-ios-native/
+│   ├── ov-rn-android-native/
+│   └── ov-pr/                         ← platform-neutral, no rules file
+│       ├── .claude-plugin/plugin.json
+│       └── skills/review-quick/SKILL.md
 └── references/                        ← shallow clones, git-ignored
     ├── agent-rules/
     ├── SwiftAgents/
@@ -207,5 +248,7 @@ ai-dev-skills/
 ## When adding / changing skills
 
 - Skills are rituals, not rules. If content feels like a standing rule, move it to `rules/<stack>.md` and have the skill reference it instead.
-- Every skill has a `description` frontmatter field that governs auto-invocation. Keep it specific — vague descriptions cause spurious invocations.
+- Every skill has a `description` frontmatter field that governs auto-invocation. Keep it specific — vague descriptions cause spurious invocations. With two review commands, each description must say which one to prefer and when, or Claude will pick the wrong one.
 - If a skill starts accumulating flags or branches, rethink. One command per phase, no flags is the rule.
+- New skills go in an `ov-` prefixed plugin, and if they should ship in the filesystem install, they need a line in `install.sh` (`RITUALS` for a per-stack ritual, `EXTRAS` for a platform-neutral one).
+- **Cross-references between skills use the dash form** (`/ov-ios-init`, not `/ov-ios:init`), because `install.sh` is the primary install mode here and the colon form doesn't resolve there. The only colon-form mentions in the repo are in the Installation section above, where the point is to document the difference. Catalog text in `marketplace.json` and `plugin.json` names skills without a leading slash so it stays correct in either mode.

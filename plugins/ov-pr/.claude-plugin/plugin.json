@@ -1,0 +1,10 @@
+{
+  "name": "ov-pr",
+  "version": "0.1.0",
+  "description": "Lightweight, platform-neutral GitHub PR review — one moderate-depth pass, at most three findings, posted as per-line questions.",
+  "author": {
+    "name": "Onur Var",
+    "email": "onur.var@primer.io"
+  },
+  "keywords": ["review", "pull-request", "github", "lightweight"]
+}

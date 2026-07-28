@@ -1,0 +1,10 @@
+{
+  "name": "ov-rn-ios-native",
+  "version": "0.1.0",
+  "description": "React Native iOS bridge (Swift / Obj-C / Obj-C++) — planning, always-on rules via CLAUDE.md @import, and high-signal review pipeline for TurboModules, Fabric components, and bridge code.",
+  "author": {
+    "name": "Onur Var",
+    "email": "onur.var@primer.io"
+  },
+  "keywords": ["react-native", "ios", "swift", "objective-c", "turbomodule", "fabric", "bridge", "review", "planning"]
+}
